@@ -1,0 +1,12 @@
+error: functions used as tests returning Result<_, _> must not use #[should_panic]
+  --> $DIR/termination-trait-in-test-should-panic.rs:22:1
+   |
+LL | / fn not_a_num() -> Result<(), ParseIntError> {
+LL | |     //~^ ERROR functions used as tests returning Result<_, _> must not use #[should_panic]
+LL | |     let _: u32 = "abc".parse()?;
+LL | |     Ok(())
+LL | | }
+   | |_^
+
+error: aborting due to previous error
+
