@@ -328,7 +328,7 @@ enum BadTestSignature {
     NotEvenAFunction,
     WrongTypeSignature,
     NoArgumentsAllowed,
-    ShouldPanicOnlyWithNoArgs
+    ShouldPanicOnlyWithNoArgs,
 }
 
 fn is_test_fn(cx: &TestCtxt, i: &ast::Item) -> bool {
@@ -347,7 +347,7 @@ fn is_test_fn(cx: &TestCtxt, i: &ast::Item) -> bool {
                 };
 
                 if !decl.inputs.is_empty() {
-                    return No(BadTestSignature::NoArgumentsAllowed)
+                    return No(BadTestSignature::NoArgumentsAllowed);
                 }
 
                 match (has_output, cx.features.termination_trait_test, has_should_panic_attr) {
@@ -359,7 +359,6 @@ fn is_test_fn(cx: &TestCtxt, i: &ast::Item) -> bool {
                     },
                     (true, false, _) => No(BadTestSignature::WrongTypeSignature),
                     (false, _, _) => Yes
-
                 }
             }
             _ => No(BadTestSignature::NotEvenAFunction),
@@ -375,11 +374,14 @@ fn is_test_fn(cx: &TestCtxt, i: &ast::Item) -> bool {
                     BadTestSignature::NotEvenAFunction =>
                         diag.span_err(i.span, "only functions may be used as tests"),
                     BadTestSignature::WrongTypeSignature =>
-                        diag.span_err(i.span, "functions used as tests must have signature fn() -> ()"),
+                        diag.span_err(i.span,
+                                      "functions used as tests must have signature fn() -> ()"),
                     BadTestSignature::NoArgumentsAllowed =>
                         diag.span_err(i.span, "functions used as tests can not have any arguments"),
                     BadTestSignature::ShouldPanicOnlyWithNoArgs =>
-                        diag.span_err(i.span, "test functions returning Result<> must not use #[should_panic]"),
+                        diag.span_err(i.span,
+                                      "functions used as tests returning Result<_, _> must \
+                                      not use #[should_panic]"),
                 }
                 false
             }
@@ -420,7 +422,7 @@ fn is_bench_fn(cx: &TestCtxt, i: &ast::Item) -> bool {
                 // well before resolve, can't get too deep.
                 input_cnt == 1 && output_matches
             }
-          _ => false
+            _ => false
         }
     }
 

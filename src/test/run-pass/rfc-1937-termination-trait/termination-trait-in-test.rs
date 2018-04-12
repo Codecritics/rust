@@ -26,7 +26,7 @@ fn is_a_num() -> Result<(), ParseIntError> {
 #[test]
 #[should_panic]
 fn not_a_num() -> Result<(), ParseIntError> {
-    //~^ ERROR Tests returning Result cannot use #[should_panic] https://github.com/rust-lang/rust/issues/48854
+    //~^ ERROR test functions returning Result<_, _> must not use #[should_panic]
     let _: u32 = "abc".parse()?;
     Ok(())
 }
