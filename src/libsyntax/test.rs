@@ -379,9 +379,7 @@ fn is_test_fn(cx: &TestCtxt, i: &ast::Item) -> bool {
                     BadTestSignature::NoArgumentsAllowed =>
                         diag.span_err(i.span, "functions used as tests can not have any arguments"),
                     BadTestSignature::ShouldPanicOnlyWithNoArgs =>
-                        diag.span_err(i.span,
-                                      "functions used as tests returning Result<_, _> must \
-                                      not use #[should_panic]"),
+                        diag.span_err(i.span, "functions using `#[should_panic]` must return `()`"),
                 }
                 false
             }

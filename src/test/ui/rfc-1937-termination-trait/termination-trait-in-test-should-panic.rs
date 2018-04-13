@@ -20,7 +20,7 @@ use test::Bencher;
 #[test]
 #[should_panic]
 fn not_a_num() -> Result<(), ParseIntError> {
-    //~^ ERROR functions used as tests returning Result<_, _> must not use #[should_panic]
+    //~^ ERROR functions using `#[should_panic]` must return `()`
     let _: u32 = "abc".parse()?;
     Ok(())
 }
